@@ -59,12 +59,18 @@ func scan(myInput InputData) (int64, string) {
 	return operation, operation_type
 }
 
+func setupCorsResponse(w *http.ResponseWriter, req *http.Request) {
+	(*w).Header().Set("Access-Control-Allow-Origin", "*")
+	(*w).Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
+	(*w).Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Authorization")
+ }
+
 func OperationFunc(w http.ResponseWriter, r *http.Request){
 	// Handling CORS
-	if r.Method != http.MethodPost {
-		w.Header().Set("Allow", http.MethodPost)
-		http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
-	}
+	setupCorsResponse(&w, r)
+		if (*r).Method == "OPTIONS" {
+		   return
+		}
 
 	var myInput InputData
 	
